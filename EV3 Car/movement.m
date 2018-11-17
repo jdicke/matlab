@@ -34,8 +34,8 @@ normalBlueValue = 50;
 
 BACKUP_PAUSE_TIME = 1.5;
 TURNAROUND_PAUSE_TIME = 2;
-TURN_PAUSE_TIME = 1.5; %was 0.26 at 65 speed
-TURN_LEFT_PAUSE_TIME = 1.575; %was 1.5 at 65 speed
+TURN_PAUSE_TIME = 1.3; %was 0.26 at 65 speed
+TURN_LEFT_PAUSE_TIME = 1.3; %was 1.5 at 65 speed
 LEFT_PAUSE_TIME = 3;
 RAMP_PAUSE_TIME = 2;
 CLEAR_WALL_TIME = 1;
@@ -62,7 +62,7 @@ while key ~= 'q'
        brick.MoveMotor(leftMotor, SPEED);
        pause(1);
        
-    elseif color_rgb(2) < greenValue && color_rgb(1) < 10 && color_rgb(3) < normalBlueValue && PICKUP_STATE == 1
+    elseif color_rgb(3) > blueValue && PICKUP_STATE == 1 && color_rgb(1) < 10 && color_rgb(2) < 20
         
         disp("at a drop off location");
         PICKUP_STATE = false;
@@ -116,36 +116,7 @@ while key ~= 'q'
             end
         end
         
-        %{
-        %At the drop off location
-        disp("at a drop off location");
-        PICKUP_STATE = false;
-        brick.StopAllMotors(1);
-        %Spin 180 to face back to the person to pickup.
-        brick.MoveMotor(rightMotor, SPEED);
-        brick.MoveMotor(leftMotor, 0);
-        pause(TURNAROUND_PAUSE_TIME);
-        brick.StopAllMotors(1);
-        pause(1);
-        %Open Ramp POSITIVE value is CLOSE
-        brick.MoveMotor(rampMotor, -RAMP_SPEED);
-        pause(RAMP_PAUSE_TIME);
-        %backup to pickup person
-        brick.MoveMotor(rightMotor, -SPEED);
-        brick.MoveMotor(leftMotor, -SPEED);
-        pause(BACKUP_PAUSE_TIME+5);
-        brick.StopAllMotors(1);
-        %Close Ramp
-        brick.MoveMotor(rampMotor, RAMP_SPEED);
-        pause(5);
-        brick.StopAllMotors(1);
-        %Now go off in the world and pickup
-        brick.MoveMotor(rightMotor, SPEED);
-        brick.MoveMotor(leftMotor, SPEED);
-        pause(BACKUP_PAUSE_TIME+1);
-        %}
-        
-    elseif color_rgb(3) > blueValue && ~PICKUP_STATE && color_rgb(1) < 10 && color_rgb(2) < 20
+    elseif color_rgb(2) < greenValue && color_rgb(1) < 10 && color_rgb(3) < normalBlueValue && ~PICKUP_STATE
         
         disp("at a pick up location");
         PICKUP_STATE = true;
@@ -198,34 +169,6 @@ while key ~= 'q'
                     break;
             end
         end
-        %{
-        %At the pick up location
-        disp("at a pick up location");
-        PICKUP_STATE = true;
-        brick.StopAllMotors(1);
-        %Spin 180 to face back to the person to pickup.
-        brick.MoveMotor(rightMotor, SPEED);
-        brick.MoveMotor(leftMotor, 0);
-        pause(TURNAROUND_PAUSE_TIME);
-        brick.StopAllMotors(1);
-        pause(1);
-        %Open Ramp
-        brick.MoveMotor(rampMotor, -RAMP_SPEED);
-        pause(RAMP_PAUSE_TIME);
-        %backup to pickup person
-        brick.MoveMotor(rightMotor, -SPEED);
-        brick.MoveMotor(leftMotor, -SPEED);
-        pause(BACKUP_PAUSE_TIME);
-        brick.StopAllMotors(1);
-        %Close Ramp
-        brick.MoveMotor(rampMotor, RAMP_SPEED);
-        pause(RAMP_PAUSE_TIME);
-        brick.StopAllMotors(1);
-        %Now go dropoff
-        brick.MoveMotor(rightMotor, SPEED);
-        brick.MoveMotor(leftMotor, SPEED);
-        pause(BACKUP_PAUSE_TIME+1);
-        %}
         
     else
     
@@ -252,9 +195,7 @@ while key ~= 'q'
                brick.beep();
                %These next three lines make sure that it clears the wall
                %before turning left.
-               %brick.MoveMotor(leftMotor, SPEED);
-               %brick.MoveMotor(rightMotor, SPEED);
-               %pause(CLEAR_WALL_TIME);
+
                disp('Turning left after touch sensor!');
                %first back up
                brick.StopAllMotors('Coast');
@@ -332,8 +273,7 @@ while key ~= 'q'
            end
            %These next three lines make sure that it clears the wall
            %before turning left.
-           %brick.MoveMotor(leftMotor, SPEED);
-           %brick.MoveMotor(rightMotor, SPEED);
+
            brick.StopAllMotors('Coast');
            %pause(CLEAR_WALL_TIME);
            disp('Turning left!');
